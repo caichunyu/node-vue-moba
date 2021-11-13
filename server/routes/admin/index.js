@@ -21,7 +21,11 @@ module.exports = app => {
     });
   }) // 删除分类
   router.get('/', async (req, res) => {
-    const items = await req.Model.find().populate('parent').limit(10)
+   const queryOptions = {}
+    if (req.Model.modelName === 'Category'){ //增强程序健壮性，判断是否Model是Category
+      queryOptions.populate = 'parent'
+    }
+    const items = await req.Model.find().setOptions(queryOptions).limit(10)
     res.send(items);
   }) // 查询全部分类
   router.get('/:id', async (req, res) => {
