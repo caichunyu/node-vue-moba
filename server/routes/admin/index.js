@@ -21,8 +21,8 @@ module.exports = app => {
     });
   }) // 删除分类
   router.get('/', async (req, res) => {
-   const queryOptions = {}
-    if (req.Model.modelName === 'Category'){ //增强程序健壮性，判断是否Model是Category
+    const queryOptions = {}
+    if (req.Model.modelName === 'Category') { //增强程序健壮性，判断是否Model是Category
       queryOptions.populate = 'parent'
     }
     const items = await req.Model.find().setOptions(queryOptions).limit(10)
@@ -39,4 +39,13 @@ module.exports = app => {
     req.Model = require(`../../models/${modelName}`)
     next()
   }, router)
+
+  //上传部分
+  const multer = require('multer')
+  const upload = multer({dest: __dirname + '/../../uploads'})
+  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+    const file = req.file
+    file.url = `http://localhost:3000/uploads/${file.filename}`
+    res.send(file)
+  })
 }

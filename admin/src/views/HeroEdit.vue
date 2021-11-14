@@ -5,13 +5,13 @@
       <el-form-item label="名称">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
-      <el-form-item label="图标">
+      <el-form-item label="头像">
         <el-upload
             class="avatar-uploader"
             :action="$http.defaults.baseURL + '/upload'"
             :show-file-list="false"
             :on-success="afterUpload">
-          <img v-if="model.icon" :src="model.icon" class="avatar">
+          <img v-if="model.avatar" :src="model.avatar" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
@@ -29,34 +29,37 @@ export default {
   },
   data() {
     return {
-      model: {},
+      model: {
+        name:'',
+        avatar:''
+      },
     }
   },
   created() {
     this.id && this.fetch()
-    // this.fetchParents()
   },
   methods: {
     afterUpload(res){
       console.log(res)
-      this.$set(this.model,'icon',res.url) //vue动态绑定显式赋值，因为this.model里没有icon
-    },
+      // this.$set(this.model,'avatar',res.url)
+      this.model.avatar = res.url //就算加了初始的avatar也没有上去，好了，刚刚好像有缓存问题
+       },
 
     async save() {
       // let res = null
       if (this.id) {
-        await this.$http.put(`rest/items/${this.id}`, this.model)
+        await this.$http.put(`rest/heroes/${this.id}`, this.model)
       } else {
-        await this.$http.post('rest/items', this.model)
+        await this.$http.post('rest/heroes', this.model)
       }
-      await this.$router.push('/items/list')
+      await this.$router.push('/heroes/list')
       this.$message({
         type: 'success',
         message: '保存成功',
       })
     },
     async fetch() {
-      const res = await this.$http.get(`rest/items/${this.id}`)
+      const res = await this.$http.get(`rest/heroes/${this.id}`)
       this.model = res.data
     },
   }
