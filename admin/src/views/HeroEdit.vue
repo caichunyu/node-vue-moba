@@ -5,6 +5,48 @@
       <el-form-item label="名称">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
+      <el-form-item label="称号">
+        <el-input v-model="model.title"></el-input>
+      </el-form-item>
+      <el-form-item label="类型">
+        <el-select v-model="model.category" multiple>
+          <el-option v-for="item of categories" :key="item._id"
+                     :label="item.name" :value="item._id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="难度">
+        <el-rate style="margin-top: .6rem" :max="9" show-score v-model="model.scores.difficult"></el-rate>
+      </el-form-item>
+      <el-form-item label="技巧">
+        <el-rate style="margin-top: .6rem" :max="9" show-score v-model="model.scores.skills"></el-rate>
+      </el-form-item>
+      <el-form-item label="攻击">
+        <el-rate style="margin-top: .6rem" :max="9" show-score v-model="model.scores.attack"></el-rate>
+      </el-form-item>
+      <el-form-item label="生存">
+        <el-rate style="margin-top: .6rem" :max="9" show-score v-model="model.scores.survive"></el-rate>
+      </el-form-item>
+      <el-form-item label="顺风出装">
+        <el-select v-model="model.items1" multiple>
+          <el-option v-for="item of items" :key="item._id"
+                     :label="item.name" :value="item._id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="逆风出装">
+        <el-select v-model="model.items2" multiple>
+          <el-option v-for="item of items" :key="item._id"
+                     :label="item.name" :value="item._id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="使用技巧">
+        <el-input type="textarea" v-model="model.usageTips"></el-input>
+      </el-form-item>
+      <el-form-item label="团战思路">
+        <el-input type="textarea" v-model="model.teamTips"></el-input>
+      </el-form-item>
+      <el-form-item label="对抗技巧">
+        <el-input type="textarea" v-model="model.battleTips"></el-input>
+      </el-form-item>
       <el-form-item label="头像">
         <el-upload
             class="avatar-uploader"
@@ -29,21 +71,29 @@ export default {
   },
   data() {
     return {
+      categories: [],
+      items: [],
       model: {
-        name:'',
-        avatar:''
+        name: '',
+        avatar: '',
+        scores: {
+          difficult: 0
+        },
+        items1:[]
       },
     }
   },
   created() {
     this.id && this.fetch()
+    this.fetchCategories()
+    this.fetchItems()
   },
   methods: {
-    afterUpload(res){
+    afterUpload(res) {
       console.log(res)
       // this.$set(this.model,'avatar',res.url)
       this.model.avatar = res.url //就算加了初始的avatar也没有上去，好了，刚刚好像有缓存问题
-       },
+    },
 
     async save() {
       // let res = null
@@ -60,7 +110,15 @@ export default {
     },
     async fetch() {
       const res = await this.$http.get(`rest/heroes/${this.id}`)
-      this.model = res.data
+      this.model = Object.assign({}, this.model, res.data)
+    },
+    async fetchCategories() {
+      const res = await this.$http.get(`rest/categories`)
+      this.categories = res.data
+    },
+    async fetchItems() {
+      const res = await this.$http.get(`rest/items`)
+      this.items = res.data
     },
   }
 }
@@ -74,9 +132,11 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -85,6 +145,7 @@ export default {
   line-height: 178px;
   text-align: center;
 }
+
 .avatar {
   width: 178px;
   height: 178px;
