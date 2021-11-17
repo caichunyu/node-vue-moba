@@ -35,7 +35,7 @@ const routes = [
 
       {path: '/articles/create', component: ArticleEdit},
       {path: '/articles/list', component: ArticleList},
-      {path: '/articles/edit/:id', component: HeroEdit, props: true},
+      {path: '/articles/edit/:id', component: ArticleEdit, props: true},
 
 
     ]
