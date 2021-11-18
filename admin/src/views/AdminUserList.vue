@@ -1,10 +1,9 @@
 <template>
   <div>
-    <h1>列表</h1>
+    <h1>管理员列表</h1>
     <el-table :data="items">
       <el-table-column prop="_id" label="ID" width="220"></el-table-column>
-      <el-table-column prop="parent.name" label="上级分类"></el-table-column>
-      <el-table-column prop="name" label="分类名称"></el-table-column>
+      <el-table-column prop="username" label="管理员名称"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -46,7 +45,7 @@ export default {
     },
     async remove(row) {
 
-      this.$confirm(`确认删除分类${row.name}, 是否继续?`, '提示', {
+      this.$confirm(`确认删除分类${row.username}, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
