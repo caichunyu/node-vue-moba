@@ -2,6 +2,8 @@ const express =require('express')
 
 const app = express()
 
+app.set('secret','dghapohgae3423ojo') //token效验
+
 app.use(require('cors')()) //跨域
 app.use(express.json())
 app.use('/uploads', express.static(__dirname+'/uploads'))
