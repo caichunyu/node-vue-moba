@@ -1,10 +1,13 @@
 const Category = require("../../models/Category");
 const {model} = require("mongoose");
+const assert = require("http-assert");
+const jwt = require("jsonwebtoken");
 const AdminUser = require("../../models/AdminUser");
 module.exports = app => {
   const express = require('express')
   const jwt = require('jsonwebtoken')
   const AdminUser = require('../../models/AdminUser')
+  const assert = require('http-assert')
 
   const router = express.Router({
     mergeParams: true //合并路由参数
@@ -29,14 +32,7 @@ module.exports = app => {
   }) // 删除分类
 
   // //资源列表
-  router.get('/', async (req, res, next) => {
-    const token = String(req.headers.authorization || '').split(' ').pop()
-    const {id} = jwt.verify(token, app.get('secret'))
-    req.user = await AdminUser.findById(id)
-
-    // console.log(req.user)
-    await next()
-  }, async (req, res) => {
+  router.get('/', async (req, res) => {
     const queryOptions = {}
     if (req.Model.modelName === 'Category') { //增强程序健壮性，判断是否Model是Category
       queryOptions.populate = 'parent'
@@ -49,17 +45,20 @@ module.exports = app => {
     res.send(model);
   }) // 查询指定id分类
 
+  //登陆效验中间件
+  const authMiddleware = require('../../middleware/auth')
+
+//获取资源中间件
+  const resourceMiddleware = require('../../middleware/resource')
+
   //资源详情
-  app.use('/admin/api/rest/:resource', async (req, res, next) => {
-    const modelName = require('inflection').classify(req.params.resource) //复数转成类形式，加大写，去掉s
-    req.Model = require(`../../models/${modelName}`)
-    next()
-  }, router)
+  app.use('/admin/api/rest/:resource', authMiddleware(), resourceMiddleware(), router)
 
   //上传部分
   const multer = require('multer')
   const upload = multer({dest: __dirname + '/../../uploads'})
-  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+
+  app.post('/admin/api/upload', authMiddleware(), upload.single('file'), async (req, res) => {
     const file = req.file
     file.url = `http://localhost:3000/uploads/${file.filename}`
     res.send(file)
@@ -69,22 +68,25 @@ module.exports = app => {
     // 1 根据用户名找用户
     const {username, password} = req.body
     const user = await AdminUser.findOne({username}).select('+password')
-    if (!user) {
-      return res.status(422).send({
-        message: '用户不存在'
-      })
-    }
+    assert(user, 422, '用户不存在') //捕获异常
+    // if (!user) {
+    //   return res.status(422).send({
+    //     message: '用户不存在'
+    //   })
+    // }
     // 2 校验密码
     const isValid = require('bcrypt').compareSync(password, user.password)
-    if (!isValid) {
-      return res.status(422).send({
-        message: '密码错误'
-      })
-    }
-    // 3 返回token
+    assert(isValid, 422, '密码错误') //捕获异常
+
     const token = jwt.sign({id: user._id}, app.get('secret'))
     res.send({token})
   })
 
+  //错误处理函数，捕获处理异常
+  app.use(async (err, req, res, next) => {
+    res.status(err.statusCode || 500).send({
+      message: err.message
+    })
+  })
 
 }
