@@ -26,38 +26,17 @@
       </div>
     </div>
     <!--    end of nav icons-->
-<m-card icon="menu1" title="新闻资讯">
-  <div class="nav jc-between">
-    <div class="nav-item active">
-      <div class="nav-link">热门</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-link">新闻</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-link">新闻</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-link">新闻</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-link">新闻</div>
-    </div>
-  </div>
-  <div class="pt-3">
-    <swiper>
-      <swiper-slide v-for="m in 5" :key="m">
-        <div class="py-2" v-for="n in 5" :key="n">
-          <span>[新闻]</span>
+    <m-list-card icon="menu1" title="新闻资讯" :categories="newsCats">
+      <template #items="{category}">
+        <div class="py-2" v-for="(news,i) in category.newsList" :key="i">
+          <span>[{{ news.categoryName }}]</span>
           <span>|</span>
-          <span>gaoeihndso;aighnoaijfoids</span>
-          <span>06/02</span>
+          <span>{{ news.title }}</span>
+          <span>{{ news.date }}</span>
         </div>
-      </swiper-slide>
-    </swiper>
-  </div>
+      </template>
 
-</m-card>
+    </m-list-card>
   </div>
 </template>
 
@@ -72,7 +51,45 @@ export default {
         pagination: {
           el: '.pagination-home'
         }
-      }
+      },
+      newsCats: [
+        {
+          name: '热门',
+          newsList: new Array(5).fill(1).map(() => ({
+            categoryName: '公告',
+            title: '6月2日全服不停机更新',
+            date: '06/02'
+          }))
+        }, {
+          name: '新闻',
+          newsList: new Array(5).fill(1).map(() => ({
+            categoryName: '新闻',
+            title: '6月2日全服不停机更新',
+            date: '06/02'
+          }))
+        }, {
+          name: '视频',
+          newsList: new Array(5).fill(1).map(() => ({
+            categoryName: '视频',
+            title: '6月2日全服不停机更新',
+            date: '06/02'
+          }))
+        }, {
+          name: '视频',
+          newsList: new Array(5).fill(1).map(() => ({
+            categoryName: '视频',
+            title: '6月2日全服不停机更新',
+            date: '06/02'
+          }))
+        }, {
+          name: '视频',
+          newsList: new Array(5).fill(1).map(() => ({
+            categoryName: '视频',
+            title: '6月2日全服不停机更新',
+            date: '06/02'
+          }))
+        },
+      ]
     }
   }
 }
