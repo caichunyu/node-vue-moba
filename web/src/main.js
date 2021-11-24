@@ -7,6 +7,8 @@ import router from './router'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 
+import './assets/iconfront/iconfont.css'
+
 Vue.use(VueAwesomeSwiper)
 Vue.config.productionTip = false
 
