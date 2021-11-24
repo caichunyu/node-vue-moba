@@ -3,6 +3,7 @@ $colors: (
         "info":#4b67af,
         "white": #fff,
         "light": #f9f9f9,
+        "light-1": #d4d9de,
         "grey": #999,
         "grey-1": #666,
         "dark-1": #343440,
@@ -46,7 +47,8 @@ $spacing-types: (
 $spacing-directions: (
         t:top,
         r:right,
-        p:padding
+        l:left,
+        b:bottom
 );
 $spacing-base-size: 1rem;
 $spacing-sizes: (

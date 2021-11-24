@@ -134,3 +134,20 @@ width: 100%;
     }
   }
 }
+
+//sprite
+.sprite{
+  background:url("../images/index.png");
+  background-size: 28.846rem;
+  display: inline-block;
+  &.sprite-news{
+    width: 1.769rem;
+    height: 1.538rem;
+    background-position: 63.546% 15.517%;;
+  }
+  &.sprite-arrow{
+    width: 0.769rem;
+    height: 0.769rem;
+    background-position: 38.577% 52.076%;
+  }
+}
