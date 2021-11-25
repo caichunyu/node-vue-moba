@@ -1,9 +1,9 @@
 <template>
   <div class="card p-3 bg-white mt-3">
     <div class="card-header d-flex pb-3" >
-      <i class="iconfont icon-news fs-ssm"></i>
+      <i class="iconfont  fs-ssm" :class="`icon-${icon}`"></i>
       <div class="fs-xl flex-1 px-2">{{ title }}</div>
-      <i class="iconfont fs-ssm" :class="`icon-${icon}`"></i>
+      <i class="iconfont fs-ssm icon-menu1" ></i>
     </div>
     <div class="card-body pt-3">
 <slot></slot>
