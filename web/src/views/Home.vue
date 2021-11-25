@@ -28,11 +28,11 @@
     <!--    end of nav icons-->
     <m-list-card icon="menu1" title="新闻资讯" :categories="newsCats">
       <template #items="{category}">
-        <div class="py-2" v-for="(news,i) in category.newsList" :key="i">
-          <span>[{{ news.categoryName }}]</span>
+        <div class="py-2 fs-lg d-flex" v-for="(news,i) in category.newsList" :key="i">
+          <span class="px-2">[{{ news.categoryName }}]</span>
           <span>|</span>
-          <span>{{ news.title }}</span>
-          <span>{{ news.date }}</span>
+          <span class="flex-1 px-2 text-ellipsis">{{ news.title }}</span>
+          <span class="text-grey-1 fs-sm">{{ news.createdAt | date }}</span>
         </div>
       </template>
 
@@ -42,8 +42,14 @@
 
 <script>
 // @ is an alias to /src
+import dayjs from 'dayjs'
 
 export default {
+  filters: {
+    date(val) {
+      return dayjs(val).format('MM/DD')
+    }
+  },
   name: 'Home',
   data() {
     return {
@@ -52,45 +58,17 @@ export default {
           el: '.pagination-home'
         }
       },
-      newsCats: [
-        {
-          name: '热门',
-          newsList: new Array(5).fill(1).map(() => ({
-            categoryName: '公告',
-            title: '6月2日全服不停机更新',
-            date: '06/02'
-          }))
-        }, {
-          name: '新闻',
-          newsList: new Array(5).fill(1).map(() => ({
-            categoryName: '新闻',
-            title: '6月2日全服不停机更新',
-            date: '06/02'
-          }))
-        }, {
-          name: '视频',
-          newsList: new Array(5).fill(1).map(() => ({
-            categoryName: '视频',
-            title: '6月2日全服不停机更新',
-            date: '06/02'
-          }))
-        }, {
-          name: '视频',
-          newsList: new Array(5).fill(1).map(() => ({
-            categoryName: '视频',
-            title: '6月2日全服不停机更新',
-            date: '06/02'
-          }))
-        }, {
-          name: '视频',
-          newsList: new Array(5).fill(1).map(() => ({
-            categoryName: '视频',
-            title: '6月2日全服不停机更新',
-            date: '06/02'
-          }))
-        },
-      ]
+      newsCats: []
     }
+  },
+  methods: {
+    async fetchNewsCats() {
+      const res = await this.$http.get('news/list')
+      this.newsCats = res.data
+    }
+  },
+  created() {
+    this.fetchNewsCats()
   }
 }
 </script>
