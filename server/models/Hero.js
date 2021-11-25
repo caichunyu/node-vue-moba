@@ -5,7 +5,7 @@ const schema = new mongoose.Schema({
   name: {type: String},
   avatar: {type: String},
   title: {type: String},
-  category: [{type: mongoose.SchemaTypes.ObjectId, ref: 'Category'}], //数组可对应多个
+  categories: [{type: mongoose.SchemaTypes.ObjectId, ref: 'Category'}], //数组可对应多个
   scores: {
     difficult: {type: Number},
     skills: {type: Number},
@@ -30,4 +30,4 @@ const schema = new mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Hero', schema)
+module.exports = mongoose.model('Hero', schema,'heroes')
