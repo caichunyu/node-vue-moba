@@ -42,10 +42,11 @@
     <m-list-card icon="card-hero" title="英雄列表" :categories="heroesCats">
       <template #items="{category}">
         <div class="d-flex flex-wrap" style="margin: 0 -0.5rem;">
-        <div class="py-2 p-2 text-center " style="width: 20%" v-for="(hero,i) in category.heroList" :key="i">
+        <router-link tag="div" :to="`/heroes/${hero._id}`"
+            class="py-2 p-2 text-center " style="width: 20%" v-for="(hero,i) in category.heroList" :key="i">
              <img class="w-100" :src="hero.avatar" alt>
              <div>{{hero.name}}</div>
-         </div>
+         </router-link>
         </div>
       </template>
     </m-list-card>

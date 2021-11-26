@@ -336,7 +336,7 @@ module.exports = app => {
         return hero
       })
 
-      // await Hero.deleteMany({})
+      // await Hero.delet eMany({})
       //录入
       await Hero.insertMany(cat.heroes)
     }
@@ -373,6 +373,12 @@ module.exports = app => {
   //文章详情
   router.get('/article/:id', async (req, res) => {
     const data = await Article.findById(req.params.id)
+    res.send(data)
+  })
+
+  //英雄详情
+  router.get('/heroes/:id', async (req, res) => {
+    const data = await Hero.findById(req.params.id).populate('categories').lean()
     res.send(data)
   })
 
